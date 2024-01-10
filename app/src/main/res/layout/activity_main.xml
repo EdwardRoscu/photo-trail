@@ -3,27 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <Button
         android:id="@+id/addAlbumButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add New Album" />
+        android:text="Add New Album"
+        android:backgroundTint="@color/primary"
+        android:textColor="@android:color/white"
+        android:elevation="4dp"
+        android:layout_marginBottom="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/albumsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+        android:overScrollMode="never" />
 
     <Button
         android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
+        android:backgroundTint="@color/primaryDark"
         android:text="Exit"
-        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:elevation="4dp"
         android:layout_marginTop="16dp" />
 </LinearLayout>

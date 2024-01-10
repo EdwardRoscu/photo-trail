@@ -37,7 +37,7 @@ class PhotoAdapter(
 
         holder.imageName.text = photo.name
 
-        holder.itemView.setOnClickListener { onPhotoClick(photo) }
+        //holder.itemView.setOnClickListener { onPhotoClick(photo) }
     }
 
 
