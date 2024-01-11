@@ -3,8 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Photo Trail"
+            android:textSize="24sp"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/addAlbumButton"
@@ -14,6 +27,7 @@
         android:backgroundTint="@color/primary"
         android:textColor="@android:color/white"
         android:elevation="4dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView

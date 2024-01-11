@@ -10,11 +10,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.example.phototrail.data.Photo
@@ -26,8 +28,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.launch
 import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -72,6 +77,8 @@ class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
 
         loadPhotos()
 
+        getAlbumName(albumId)
+
         backButton = findViewById(R.id.backButton)
         backButton.setOnClickListener {
             finish()
@@ -79,6 +86,22 @@ class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getLocation()
+    }
+
+    private fun getAlbumName(albumId: Int) {
+        lifecycleScope.launch {
+            val tvAlbumName = findViewById<TextView>(R.id.tvAlbumName)
+            try {
+                val albumName = withContext(Dispatchers.IO) {
+                    database.albumDao().getAlbumNameById(albumId)
+                }
+                tvAlbumName.text = albumName
+            } catch (e: Exception) {
+                Log.e("AlbumActivity", "Error fetching album name", e)
+                val unknown = "Unknown Album"
+                tvAlbumName.text = unknown
+            }
+        }
     }
 
     private fun getPhotoLocation(uri: Uri): Pair<Double?, Double?> {

@@ -10,6 +10,9 @@ interface AlbumDao {
     @Query("SELECT * FROM album")
     suspend fun getAllAlbums(): List<Album>
 
+    @Query("SELECT name FROM album WHERE id = :albumId")
+    fun getAlbumNameById(albumId: Int): String
+
     @Delete
     suspend fun deleteAlbum(album: Album)
 }
