@@ -248,7 +248,7 @@ class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
             map.clear()
             photos.forEach { photo ->
                 val location = LatLng(photo.latitude, photo.longitude)
-                map.addMarker(MarkerOptions().position(location).title(photo.name))
+                map.addMarker(MarkerOptions().position(location).title("${photo.number}. ${photo.name}"))
             }
         }
     }
