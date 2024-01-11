@@ -11,5 +11,5 @@ data class Photo(
     val latitude: Double,
     val longitude: Double,
     val name: String,
-    val number: Int
+    var number: Int
 )

@@ -3,6 +3,7 @@ package com.example.phototrail.ui.album
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +12,9 @@ import com.example.phototrail.data.Photo
 import com.bumptech.glide.Glide
 
 class PhotoAdapter(
-    private val photoList: List<Photo>,
-    private val onPhotoClick: (Photo) -> Unit
+    val photoList: MutableList<Photo>,
+    private val onPhotoClick: (Photo) -> Unit,
+    private val onDeleteClick: (Photo, Int) -> Unit
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     class PhotoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -29,7 +31,7 @@ class PhotoAdapter(
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val photo = photoList[position]
 
-        holder.photoNumber.text = "${position + 1}."
+        holder.photoNumber.text = photo.number.toString()
 
         Glide.with(holder.imageView.context)
             .load(photo.uri)
@@ -38,8 +40,11 @@ class PhotoAdapter(
         holder.imageName.text = photo.name
 
         //holder.itemView.setOnClickListener { onPhotoClick(photo) }
-    }
 
+        holder.itemView.findViewById<Button>(R.id.btnDeletePhoto).setOnClickListener {
+            onDeleteClick(photo, position)
+        }
+    }
 
     override fun getItemCount() = photoList.size
 }

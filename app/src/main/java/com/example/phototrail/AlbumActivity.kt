@@ -208,12 +208,38 @@ class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun loadPhotos() = runBlocking {
-        val photos = database.photoDao().getPhotosByAlbum(albumId)
-        photosRecyclerView.adapter = PhotoAdapter(photos) { photo ->
+        val photos = database.photoDao().getPhotosByAlbum(albumId).toMutableList()
+
+        photosRecyclerView.adapter = PhotoAdapter(photos, { photo ->
             openPhotoFullScreen(photo)
-        }
+        }, { photo, position ->
+            deletePhoto(photo, position)
+        })
+
         if (isMapReady) {
             updateMapMarkers(photos)
+        }
+    }
+
+    private fun deletePhoto(photo: Photo, position: Int) = runBlocking {
+        launch {
+            database.photoDao().deletePhoto(photo)
+
+            (photosRecyclerView.adapter as PhotoAdapter).apply {
+                photoList.removeAt(position)
+                notifyItemRemoved(position)
+            }
+
+            val updatedPhotos = database.photoDao().getPhotosByAlbum(albumId).toMutableList()
+
+            updatedPhotos.forEachIndexed { index, photo ->
+                photo.number = index + 1
+                database.photoDao().updatePhoto(photo)
+            }
+
+            if (isMapReady) {
+                updateMapMarkers(updatedPhotos)
+            }
         }
     }
 
@@ -222,7 +248,7 @@ class AlbumActivity : AppCompatActivity(), OnMapReadyCallback {
             map.clear()
             photos.forEach { photo ->
                 val location = LatLng(photo.latitude, photo.longitude)
-                map.addMarker(MarkerOptions().position(location).title("Photo ${photo.number}"))
+                map.addMarker(MarkerOptions().position(location).title(photo.name))
             }
         }
     }
